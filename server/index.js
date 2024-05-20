@@ -7,7 +7,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "*",
+    origin: "https://xoxreact-client.vercel.app",
     methods: ["GET", "POST"]
   }
 });
@@ -15,7 +15,7 @@ const io = socketIo(server, {
 const PORT = process.env.PORT || 4000;
 
 app.use(cors({
-  origin: "*",
+  origin: "https://xoxreact-client.vercel.app",
   methods: ["GET", "POST"]
 }));
 
