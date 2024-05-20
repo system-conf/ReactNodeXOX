@@ -1,4 +1,4 @@
-# X O Oyunu
+React-Node.js XOX GAME
 
 Bu proje, React, Node.js ve Socket.IO kullanılarak geliştirilmiş bir X O (Tic Tac Toe) oyunudur.
 
@@ -16,41 +16,37 @@ Bu oyun, iki oyuncunun tarayıcı üzerinden birbirleriyle X O oyunu oynamasına
 
 1. Projeyi bilgisayarınıza klonlayın:
 
-```
-git clone <repo-link>
-```
+   ```
+   git clone <repo-link>
+   ```
 
 2. Sunucu tarafını başlatmak için terminalde `server` klasörüne gidin ve bağımlılıkları yükleyin:
 
-```
-cd server
-npm install
-```
+   ```
+   cd server
+   npm install
+   ```
 
 3. Sunucuyu çalıştırın:
 
-```
-npm start
-```
+   ```
+   npm start
+   ```
 
 4. İstemci tarafını başlatmak için terminalde ana klasöre gidin ve bağımlılıkları yükleyin:
 
-```
-cd client
-npm install
-```
+   ```
+   cd client
+   npm install
+   ```
 
 5. İstemciyi çalıştırın:
 
-```
-npm start
-```
+   ```
+   npm start
+   ```
 
 6. Tarayıcınızda `http://localhost:3000` adresine gidin ve oyunun keyfini çıkarın!
-
-## Katkıda Bulunma
-
-Katkıda bulunmak isteyenler için projeyi forklayabilir ve geliştirmelerinizi öneri olarak gönderebilirsiniz.
 
 ## Lisans
 
