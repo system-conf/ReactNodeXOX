@@ -19,7 +19,7 @@ function App() {
   const [gameStarted, setGameStarted] = useState(false); // Oyunun başlayıp başlamadığını takip edin
 
   useEffect(() => {
-    const newSocket = io('http://localhost:4000', { transports: ['websocket'] });
+    const newSocket = io('https://xoxreact-server.vercel.app', { transports: ['websocket'] });
     setSocket(newSocket);
 
     newSocket.on('assignSymbol', (symbol) => {
