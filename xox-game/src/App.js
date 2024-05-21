@@ -17,6 +17,8 @@ function App() {
   const [gameStarted, setGameStarted] = useState(false);
 
   useEffect(() => {
+    if (!room) return;
+
     const pusher = new Pusher('7c84220d65bea08859f5', {
       cluster: 'eu',
     });
