@@ -9,8 +9,8 @@ const io = socketIo(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"]
-  }
-    transports: ['polling']
+  },
+  transports: ['polling']
 });
 
 const PORT = process.env.PORT || 4000;
