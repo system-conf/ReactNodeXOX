@@ -1,13 +1,17 @@
 {
     "version": 2,
-    "rewrites": [
+    "routes": [
       {
-        "source": "/socket.io/(.*)",
-        "destination": "https://xoxreact-servers.vercel.app/socket.io/$1"
+        "src": "/socket.io/(.*)",
+        "dest": "https://xoxreact-servers.vercel.app/socket.io/$1",
+        "headers": {
+          "Connection": "upgrade",
+          "Upgrade": "websocket"
+        }
       },
       {
-        "source": "/(.*)",
-        "destination": "/index.js"
+        "src": "/(.*)",
+        "dest": "/index.js"
       }
     ]
   }
