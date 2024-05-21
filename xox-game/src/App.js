@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import { CSSTransition } from 'react-transition-group';
-import './App.css'; // CSS dosyasını ekleyin
+import './App.css';
 
-const clickSound = new Audio('/click.mp3'); // Ses dosyanızı doğru yolda ekleyin
-const winSound = new Audio('/win.mp3'); // Kazanma sesini ekleyin
+const clickSound = new Audio('/click.mp3');
+const winSound = new Audio('/win.mp3');
 
 function App() {
   const [name, setName] = useState('');
@@ -16,7 +16,7 @@ function App() {
   const [winnerName, setWinnerName] = useState(null);
   const [playerSymbol, setPlayerSymbol] = useState('');
   const [socket, setSocket] = useState(null);
-  const [gameStarted, setGameStarted] = useState(false); // Oyunun başlayıp başlamadığını takip edin
+  const [gameStarted, setGameStarted] = useState(false);
 
   useEffect(() => {
     const newSocket = io('https://xoxreact-servers.vercel.app', { transports: ['websocket'] });
@@ -28,7 +28,7 @@ function App() {
 
     newSocket.on('gameStart', ({ playerX, playerO }) => {
       console.log(`Game started between ${playerX} and ${playerO}`);
-      setGameStarted(true); // Oyun başladığında durumu güncelleyin
+      setGameStarted(true);
     });
 
     newSocket.on('restart', () => {
@@ -40,7 +40,7 @@ function App() {
     });
 
     return () => {
-      newSocket.close(); // Bileşen unmount olduğunda soket bağlantısını kapatın
+      newSocket.close();
     };
   }, []);
 
@@ -74,7 +74,6 @@ function App() {
       }
     }
 
-    // Berabere kontrolü
     if (squares.every(square => square !== null)) {
       return 'Berabere';
     }
@@ -93,7 +92,7 @@ function App() {
     const calculatedWinner = calculateWinner(newBoard);
     let calculatedWinnerName = null;
     if (calculatedWinner) {
-      calculatedWinnerName = calculatedWinner === playerSymbol ? name : 'Diğer Oyuncu'; // Kazanan ismini belirleyin
+      calculatedWinnerName = calculatedWinner === playerSymbol ? name : 'Diğer Oyuncu';
       setWinner(calculatedWinner);
       setWinnerName(calculatedWinnerName);
       winSound.play();
