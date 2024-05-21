@@ -6,17 +6,17 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 app.use(cors());
-app.use(express.json()); // JSON body parsing middleware
+app.use(express.json());
 
 const pusher = new Pusher({
-  appId: process.env.PUSHER_APP_ID || "1806180",  // Çevre değişkeni kullanın veya varsayılan değer
+  appId: process.env.PUSHER_APP_ID || "1806180",
   key: process.env.PUSHER_KEY || "7c84220d65bea08859f5",
   secret: process.env.PUSHER_SECRET || "e7ea56a0411dab4f758d",
   cluster: process.env.PUSHER_CLUSTER || "eu",
   useTLS: true
 });
 
-let rooms = {}; // Oda ve oyuncu bilgilerini saklamak için
+let rooms = {};
 
 app.post('/join', (req, res) => {
   const { room, name } = req.body;
