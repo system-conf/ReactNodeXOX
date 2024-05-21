@@ -1,15 +1,13 @@
 {
     "version": 2,
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/index.js"
-      }
-    ],
     "rewrites": [
       {
         "source": "/socket.io/(.*)",
         "destination": "https://xoxreact-servers.vercel.app/socket.io/$1"
+      },
+      {
+        "source": "/(.*)",
+        "destination": "/index.js"
       }
     ]
   }
