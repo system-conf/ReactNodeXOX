@@ -19,7 +19,7 @@ function App() {
   const [gameStarted, setGameStarted] = useState(false);
 
   useEffect(() => {
-    const newSocket = io('https://xoxreact-servers.vercel.app', { transports: ['websocket'] });
+    const newSocket = io('https://xoxreact-servers.vercel.app', { transports: ['polling'] });
     setSocket(newSocket);
 
     newSocket.on('assignSymbol', (symbol) => {
