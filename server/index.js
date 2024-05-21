@@ -10,7 +10,7 @@ const io = socketIo(server, {
     origin: "*",
     methods: ["GET", "POST"]
   },
-  transports: ['polling']
+  transports: ['polling'] // Burada WebSocket yerine long-polling kullanıyoruz
 });
 
 const PORT = process.env.PORT || 4000;
