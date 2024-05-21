@@ -9,10 +9,10 @@ app.use(cors());
 app.use(express.json()); // JSON body parsing middleware
 
 const pusher = new Pusher({
-  app_id = "1806180"
-  key = "7c84220d65bea08859f5"
-  secret = "e7ea56a0411dab4f758d"
-  cluster = "eu"
+  appId: process.env.PUSHER_APP_ID || "1806180",  // Çevre değişkeni kullanın veya varsayılan değer
+  key: process.env.PUSHER_KEY || "7c84220d65bea08859f5",
+  secret: process.env.PUSHER_SECRET || "e7ea56a0411dab4f758d",
+  cluster: process.env.PUSHER_CLUSTER || "eu",
   useTLS: true
 });
 
