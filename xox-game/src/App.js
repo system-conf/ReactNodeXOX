@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Pusher from 'pusher-js';
+import io from 'socket.io-client';
+import { CSSTransition } from 'react-transition-group';
 import './App.css';
 
 const clickSound = new Audio('/click.mp3');
@@ -14,30 +15,30 @@ function App() {
   const [winner, setWinner] = useState(null);
   const [winnerName, setWinnerName] = useState(null);
   const [playerSymbol, setPlayerSymbol] = useState('');
+  const [socket, setSocket] = useState(null);
   const [gameStarted, setGameStarted] = useState(false);
 
   useEffect(() => {
-    if (!room) return;
+    const newSocket = io('https://xoxreact-servers.vercel.app', { transports: ['polling'] });
+    setSocket(newSocket);
 
-    const pusher = new Pusher('7c84220d65bea08859f5', {
-      cluster: 'eu',
+    newSocket.on('assignSymbol', (symbol) => {
+      setPlayerSymbol(symbol);
     });
 
-    const channel = pusher.subscribe(room);
-
-    channel.bind('gameStart', ({ playerX, playerO }) => {
+    newSocket.on('gameStart', ({ playerX, playerO }) => {
       console.log(`Game started between ${playerX} and ${playerO}`);
       setGameStarted(true);
     });
 
-    channel.bind('move', (data) => {
+    newSocket.on('move', (data) => {
       setBoard(data.board);
       setIsXNext(data.isXNext);
       setWinner(data.winner);
       setWinnerName(data.winnerName);
     });
 
-    channel.bind('restart', () => {
+    newSocket.on('restart', () => {
       setBoard(Array(9).fill(null));
       setWinner(null);
       setWinnerName(null);
@@ -46,7 +47,7 @@ function App() {
     });
 
     return () => {
-      pusher.unsubscribe(room);
+      newSocket.close();
     };
   }, [room]);
 
@@ -93,61 +94,40 @@ function App() {
       winSound.play();
     }
 
-    await fetch('https://xoxreact-servers.vercel.app/move', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        room,
+    if (socket) {
+      socket.emit('move', {
         board: newBoard,
         isXNext: !isXNext,
         winner: calculatedWinner,
         winnerName: calculatedWinnerName,
-      }),
-    });
+      });
+    }
 
     clickSound.play();
   };
 
-  const handleRestart = async () => {
-    await fetch('https://xoxreact-servers.vercel.app/restart', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ room }),
-    });
-  };
-
-  const joinRoom = async () => {
-    if (name && room) {
-      const response = await fetch('https://xoxreact-servers.vercel.app/join', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, room }),
-      });
-      const data = await response.json();
-      setPlayerSymbol(data.symbol);
-      setConnected(true);
+  const handleRestart = () => {
+    if (socket) {
+      socket.emit('restart');
     }
   };
 
   const renderSquare = (index) => (
-    <button className="square" onClick={() => handleClick(index)}>
-      {board[index]}
-    </button>
+    <CSSTransition key={index} in={!!board[index]} timeout={300} classNames="square">
+      <button className="square" onClick={() => handleClick(index)}>
+        {board[index]}
+      </button>
+    </CSSTransition>
   );
 
-  const status = winner
-    ? winner === 'Berabere'
-      ? 'Berabere!'
-      : `Kazanan: ${winnerName}`
-    : gameStarted
-    ? `Sıradaki oyuncu: ${isXNext ? 'X' : 'O'}`
-    : 'Diğer oyuncunun bağlanmasını bekleyin...';
+  const joinRoom = () => {
+    if (name && room && socket) {
+      socket.emit('join', { name, room });
+      setConnected(true);
+    }
+  };
+
+  const status = winner ? (winner === 'Berabere' ? 'Berabere!' : `Kazanan: ${winnerName}`) : gameStarted ? `Sıradaki oyuncu: ${isXNext ? 'X' : 'O'}` : 'Diğer oyuncunun bağlanmasını bekleyin...';
 
   return (
     <div className="app">
@@ -167,24 +147,20 @@ function App() {
             value={room}
             onChange={(e) => setRoom(e.target.value)}
           />
-          <button className="button" onClick={joinRoom}>
-            Join Room
-          </button>
+          <button className="button" onClick={joinRoom}>Join Room</button>
         </div>
       ) : (
         <div>
           <div className="status">{status}</div>
           <div className="board">
-            {[0, 1, 2].map((row) => (
+            {[0, 1, 2].map(row => (
               <div key={row} className="board-row">
-                {[0, 1, 2].map((col) => renderSquare(row * 3 + col))}
+                {[0, 1, 2].map(col => renderSquare(row * 3 + col))}
               </div>
             ))}
           </div>
           {winner && (
-            <button className="button" onClick={handleRestart}>
-              Tekrar Oyna
-            </button>
+            <button className="button" onClick={handleRestart}>Tekrar Oyna</button>
           )}
         </div>
       )}
