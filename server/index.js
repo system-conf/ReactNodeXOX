@@ -10,6 +10,7 @@ const io = socketIo(server, {
     origin: "*",
     methods: ["GET", "POST"]
   }
+    transports: ['polling']
 });
 
 const PORT = process.env.PORT || 4000;
