@@ -1,18 +1,16 @@
 {
     "version": 2,
-    "routes": [
-      {
-        "src": "/socket.io/(.*)",
-        "dest": "https://xoxreact-servers.vercel.app/socket.io/$1",
-        "headers": {
-          "Connection": "upgrade",
-          "Upgrade": "websocket"
+    "builds": [
+        {
+            "src": "./index.js",
+            "use": "@vercel/node"
         }
-      },
-      {
-        "src": "/(.*)",
-        "dest": "/index.js"
-      }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/"
+        }
     ]
-  }
-  
+    
+}
